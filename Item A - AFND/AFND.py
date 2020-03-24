@@ -1,10 +1,17 @@
-class AFD:
+class estado:
+    def __init__(self):
+        self.name = None
+        self.proxEstado = None
+
+class AFND:
     def __init__(self):
         self.alfabeto = []
         self.transicoes = {}
         self.estados = []
         self.estadoInicial = None
         self.estadosFinais = []
+        self.primeiro_estado = None
+        self.ultimo_estado = None
     
     def verificar_repitidos(self, dados):
         vetor = []
@@ -41,8 +48,10 @@ class AFD:
                 for entrada in transicoes[estado]:
                     check_alfabeto.append(entrada)
                     if(entrada in self.alfabeto):
-                        if(transicoes[estado][entrada] not in self.estados):
-                            return False
+                        for i in transicoes[estado][entrada]:
+                            print(i)
+                            if(i not in self.estados):
+                                return False
                     else:
                         return False  
                 check_alfabeto.sort()
@@ -59,6 +68,7 @@ class AFD:
     def set_transicoes(self, transicoes):
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
+            print(self.transicoes)
         else:
             print("Funções de transições fora do Padrao de um AFD")
 
@@ -82,14 +92,14 @@ class AFD:
             estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
     
         if(estado_atual in self.estadosFinais):
-            print("String aceita")
+            print("aceito")
         else:
             print("Recusado")
 
-afd = AFD()
+afd = AFND()
 afd.set_alfabeto(['0','1'])
-afd.set_estados(['q1','q2','q3','q4'])
+afd.set_estados(['q1','q2','q3'])
 afd.set_estadoInicial('q1')
-afd.set_estadosFinais(['q2','q4'])
-afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
+afd.set_estadosFinais(['q2','q2'])
+afd.set_transicoes({'q1':{'0':['q3','q1'],'1':['q2']},'q2':{'0':['q1','q3'],'1':['q2']},'q3':{'0':['q2'],'1':[]}}) 
 afd.set_string('110')
