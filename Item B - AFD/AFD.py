@@ -11,9 +11,6 @@ class AFD:
         for i in dados:
             if(i not in vetor):
                 vetor.append(i)
-            else:
-                pass
-                #print("Repitido, será ignorado")
         return vetor
 
     def set_alfabeto(self, alfabeto):
@@ -21,6 +18,7 @@ class AFD:
 
     def set_estados(self, estados):
         self.estados = self.verificar_repitidos(estados)
+        self.estados.sort()
     
     def set_estadoInicial(self, estado):
         if estado in self.estados:
@@ -34,29 +32,63 @@ class AFD:
         #print(self.estadosFinais)
     
     def verificar_transicoes(self, transicoes):
-        control = False
-        for i in transicoes:
-            test = []
-            if((i not in test and i in self.estados) and control == False):
-                test.append(i)
-                for j in transicoes[i]:
-                    if(j in self.alfabeto):
-                        if(transicoes[i][j] not in self.estados):
-                            control = True
+        estados_transições = []
+        for estado in transicoes:
+            check_estados = []; estados_transições.append(estado)
+            if(estado not in check_estados and estado in self.estados):
+                check_estados.append(estado); check_alfabeto = []
+                for entrada in transicoes[estado]:
+                    check_alfabeto.append(entrada)
+                    if(entrada in self.alfabeto):
+                        if(transicoes[estado][entrada] not in self.estados):
                             return False
                     else:
-                        control = True
-                        return False
+                        return False  
+                check_alfabeto.sort()
+                if(check_alfabeto != self.alfabeto):
+                    return False           
             else:
                 return False
+        estados_transições.sort()
+        if(estados_transições != self.estados):
+            return False
         return True
 
     def set_transicoes(self, transicoes):
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
+            print(self.transicoes)
+        else:
+            print("Funções de transições fora do Padrao de um AFD")
+
+    def aplicacao_transicoes(self, estado_atual,simbolo):
+        for estado in self.transicoes:
+            if(estado == estado_atual):
+                for entrada in self.transicoes[estado]:
+                    if(entrada == simbolo):
+                        estado_atual = self.transicoes[estado][entrada]
+                        return estado_atual
+
+    def set_string(self, string):
+        for simbolo in list(set(string)):
+            if(simbolo not in self.alfabeto):
+                print("'"+ simbolo +"' nao faz parte do alfabeto")
+                return
+            
+        estado_atual = self.estadoInicial
+
+        for simbolo in string:
+            estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
+    
+        if(estado_atual in self.estadosFinais):
+            print("aceito")
+        else:
+            print("Recusado")
 
 afd = AFD()
 afd.set_alfabeto(['0','1'])
-afd.set_estados(['q1','q2',])
-afd.set_estadosFinais(['q2'])
-afd.set_transicoes({'q1':{'5':'q0','0':'q1'},'q2':{'0':'q1','1':'q2'}})
+afd.set_estados(['q1','q2','q3','q4'])
+afd.set_estadoInicial('q1')
+afd.set_estadosFinais(['q2','q4'])
+afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
+afd.set_string('110')
