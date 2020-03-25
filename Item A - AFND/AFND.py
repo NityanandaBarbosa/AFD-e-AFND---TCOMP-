@@ -2,12 +2,19 @@ class estado:
     def __init__(self):
         self.name = None
         self.proxEstado = None
+        self.anteriorEstado = None
 
     def get_proxEstado(self):
         return self.proxEstado
     
     def set_proxEstado(self, prox):
         self.proxEstado = prox
+
+    def get_anteriorEstado(self):
+        return self.anteriorEstado
+    
+    def set_anteriorEstado(self, anterior):
+        self.anteriorEstado = anterior
 
 class AFND:
     def __init__(self):
@@ -89,12 +96,26 @@ class AFND:
                 aux_fim = aux2
             else:
                 aux_fim.set_proxEstado(aux1)
+                aux1.set_anteriorEstado(aux_fim)
                 aux_fim = aux2
             estado = estado.get_proxEstado()
+        else: 
+            aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
+            if((aux1 and aux2) != None):
+                if((aux_inicio and aux_fim) == None):
+                    aux_inicio = aux1
+                    aux_fim = aux2
+                else:
+                    aux_fim.set_proxEstado(aux1)
+                    aux1.set_anteriorEstado(aux_fim)
+                    aux_fim = aux2
+        if((aux_inicio and aux_fim) != None):
+            estado.set_proxEstado(aux_inicio)
+            aux_inicio.set_anteriorEstado(estado)
+            self.ultimo_estado = aux_fim
         else:
-            aux_inicio, aux_fim = self.aplicacao_transicoes(simbolo, estado)
-        estado.set_proxEstado(aux_inicio)
-        self.ultimo_estado = aux_fim
+            print("Aqui")
+        
 
     def aplicacao_transicoes(self, simbolo,estado_atual):    
         aux_inicio = None
@@ -112,9 +133,13 @@ class AFND:
                     aux_fim = novoEstado
                 else:
                     aux_fim.set_proxEstado(novoEstado)
+                    novoEstado.set_anteriorEstado(aux_fim)
                     aux_fim = novoEstado
                 self.quantidade_estados += 1
         return aux_inicio, aux_fim
+
+    def entrada_sem_saida(self, estado):
+        pass
 
     def set_string(self, string):
         for simbolo in list(set(string)):
@@ -131,25 +156,28 @@ class AFND:
 
         for simbolo in string:
             self.laco_transicoes(simbolo)
-    
+
         estado_atual = self.primeiro_estado
         while(estado_atual.get_proxEstado() != None):
-            print(estado_atual.name)
-            self.verificacao_automato(estado_atual.name)
+            if(self.verificacao_automato(estado_atual.name) == True):
+                return
             estado_atual = estado_atual.get_proxEstado()
         else:
             print(estado_atual.name)
+            if(self.verificacao_automato(estado_atual.name) == True):
+                return
+            else:
+                print("String Recusada")
     
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
-            print("Automato Aceito")
+            print("String Aceito")
             return True
 
 afd = AFND()
 afd.set_alfabeto(['0','1'])
 afd.set_estados(['q1','q2','q3'])
 afd.set_estadoInicial('q1')
-afd.set_estadosFinais(['q2','q1'])
-afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q2']},'q2':{'0':['q3','q2'],'1':['q3']},'q3':{'0':['q1'],'1':['q1']}}) 
-afd.set_string('001')
-print(afd.quantidade_estados)
+afd.set_estadosFinais(['q2','q3'])
+afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}}) 
+afd.set_string('0000')
