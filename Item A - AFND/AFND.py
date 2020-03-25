@@ -82,7 +82,7 @@ class AFND:
         estado = self.primeiro_estado
         aux_inicio = None
         aux_fim = None
-        while estado.get_proxEstado != None:
+        while estado.get_proxEstado() != None:
             aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
             if((aux_inicio and aux_inicio) == None):
                 aux_inicio = aux1
@@ -99,15 +99,16 @@ class AFND:
     def aplicacao_transicoes(self, simbolo,estado_atual):    
         aux_inicio = None
         aux_fim = None
-        for estado in self.transicoes:
-            if(estado == estado_atual.name):
-                for entrada in self.transicoes[estado]:
+        for estados in self.transicoes:
+            if(estados == estado_atual.name):
+                for entrada in self.transicoes[estados]:
                     if(entrada == simbolo):
-                        for i in range(len(self.transicoes[estado][entrada])):
+                        for i in range(len(self.transicoes[estados][entrada])):
                             if(i == 0):
-                                estado_atual.name = self.transicoes[estado][entrada][i]
+                                estado_atual.name = self.transicoes[estados][entrada][i]
                             else:
                                 novoEstado = estado()
+                                novoEstado.name = self.transicoes[estados][entrada][i]
                                 if((aux_inicio and aux_fim) == None):
                                     aux_inicio = novoEstado
                                     aux_fim = novoEstado
@@ -132,15 +133,23 @@ class AFND:
         for simbolo in string:
             self.laco_transicoes(simbolo)
     
-        #if(estado_atual in self.estadosFinais):
-        #    print("aceito")
-        #else:
-        #    print("Recusado")
+        estado_atual = self.primeiro_estado
+        while(estado_atual.get_proxEstado() != None):
+            print(estado_atual.name)
+            self.verificacao_automato(estado_atual.name)
+            estado_atual = estado_atual.get_proxEstado()
+        else:
+            print(estado_atual.name)
+    
+    def verificacao_automato(self, estado):
+        if(estado in self.estadosFinais):
+            print("Automato Aceito")
+            return True
 
 afd = AFND()
 afd.set_alfabeto(['0','1'])
 afd.set_estados(['q1','q2','q3'])
 afd.set_estadoInicial('q1')
-afd.set_estadosFinais(['q2','q2'])
-afd.set_transicoes({'q1':{'0':['q3','q1'],'1':['q2']},'q2':{'0':['q1','q3'],'1':['q2']},'q3':{'0':['q2'],'1':[]}}) 
-afd.set_string('110')
+afd.set_estadosFinais(['q2','q1'])
+afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q2']},'q2':{'0':['q3','q2'],'1':['q3']},'q3':{'0':['q1'],'1':['q1']}}) 
+afd.set_string('001')
