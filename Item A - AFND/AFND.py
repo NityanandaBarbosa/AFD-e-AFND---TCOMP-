@@ -140,7 +140,6 @@ class AFND:
     def entrada_sem_saida(self, estado):
         if(estado == self.primeiro_estado):
             self.primeiro_estado = self.primeiro_estado.get_proxEstado()
-            self.primeiro_estado.set_anteriorEstado(None)
         elif(estado == self.ultimo_estado):
             self.ultimo_estado = self.ultimo_estado.get_anteriorEstado()
             self.ultimo_estado.set_proxEstado(None)
@@ -166,36 +165,41 @@ class AFND:
 
         for simbolo in string:
             self.laco_transicoes(simbolo)
-
-        estado_atual = self.primeiro_estado
-        while(estado_atual.get_proxEstado() != None):
-            if(self.verificacao_automato(estado_atual.name) == True):
-                self.end()
-                return
-            estado_atual = estado_atual.get_proxEstado()
-        else:
-            if(self.verificacao_automato(estado_atual.name) == True):
-                self.end()
-                return
-            else:
-                print("String Recusada\n")
-                self.end()
         
-    def end(self):
-        self.primeiro_estado = None
-        self.ultimo_estado = None
-        self.quantidade_estados = 0
-    
+        estado_atual = self.primeiro_estado
+
+        if(estado_atual != None):
+            while(estado_atual.get_proxEstado() != None):
+                if(self.verificacao_automato(estado_atual.name) == True):
+                    self.end()
+                    return
+                estado_atual = estado_atual.get_proxEstado()
+            else:
+                if(self.verificacao_automato(estado_atual.name) == True):
+                    self.end()
+                    return
+                else:
+                    print("String Recusada\n")
+                    self.end()
+        else:
+            print("String Recusada")
+            self.end()
+        
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
             print("String Aceito\n")
             return True
+
+    def end(self):
+        self.primeiro_estado = None
+        self.ultimo_estado = None
+        self.quantidade_estados = 0
 
 afd = AFND()
 afd.set_alfabeto(['0','1'])
 afd.set_estados(['q1','q2','q3'])
 afd.set_estadoInicial('q1')
 afd.set_estadosFinais(['q2','q3'])
-afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':[]},'q3':{'0':['q2','q3'],'1':['q1']}}) 
-afd.set_string('00010')
-afd.set_string('010')
+afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}}) 
+afd.set_string('001')
+afd.set_string('00')
