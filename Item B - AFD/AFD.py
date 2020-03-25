@@ -28,7 +28,8 @@ class AFD:
         estados = self.verificar_repitidos(estados)
         for i in estados:
             if i in self.estados:
-                self.estadosFinais.append(i)
+                if i not in self.estadosFinais:
+                    self.estadosFinais.append(i)
         #print(self.estadosFinais)
     
     def verificar_transicoes(self, transicoes):
@@ -88,4 +89,5 @@ afd.set_estados(['q1','q2','q3','q4'])
 afd.set_estadoInicial('q1')
 afd.set_estadosFinais(['q2','q4'])
 afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
+afd.set_string('110')
 afd.set_string('110001')

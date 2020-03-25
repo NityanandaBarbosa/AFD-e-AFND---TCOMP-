@@ -49,7 +49,8 @@ class AFND:
         estados = self.verificar_repitidos(estados)
         for i in estados:
             if i in self.estados:
-                self.estadosFinais.append(i)
+                if i not in self.estadosFinais:
+                    self.estadosFinais.append(i)
         #print(self.estadosFinais)
     
     def verificar_transicoes(self, transicoes):
@@ -179,7 +180,7 @@ class AFND:
                     self.end()
                     return
                 else:
-                    print("String Recusada\n")
+                    print("String Recusada")
                     self.end()
         else:
             print("String Recusada")
@@ -187,7 +188,7 @@ class AFND:
         
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
-            print("String Aceito\n")
+            print("String Aceito")
             return True
 
     def end(self):
@@ -195,11 +196,11 @@ class AFND:
         self.ultimo_estado = None
         self.quantidade_estados = 0
 
-afd = AFND()
-afd.set_alfabeto(['0','1'])
-afd.set_estados(['q1','q2','q3'])
-afd.set_estadoInicial('q1')
-afd.set_estadosFinais(['q2','q3'])
-afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}}) 
-afd.set_string('001')
-afd.set_string('00')
+afnd = AFND()
+afnd.set_alfabeto(['0','1'])
+afnd.set_estados(['q1','q2','q3'])
+afnd.set_estadoInicial('q1')
+afnd.set_estadosFinais(['q2','q3'])
+afnd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}}) 
+afnd.set_string('001')
+afnd.set_string('00')
