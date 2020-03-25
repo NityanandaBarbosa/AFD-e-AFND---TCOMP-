@@ -81,7 +81,6 @@ class AFND:
     def set_transicoes(self, transicoes):
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
-            print(self.transicoes)
         else:
             print("Funções de transições fora do Padrao de um AFD")
 
@@ -113,8 +112,6 @@ class AFND:
             estado.set_proxEstado(aux_inicio)
             aux_inicio.set_anteriorEstado(estado)
             self.ultimo_estado = aux_fim
-        else:
-            print("Aqui")
         
 
     def aplicacao_transicoes(self, simbolo,estado_atual):    
@@ -136,10 +133,23 @@ class AFND:
                     novoEstado.set_anteriorEstado(aux_fim)
                     aux_fim = novoEstado
                 self.quantidade_estados += 1
+        if(len(self.transicoes[estados][simbolo]) == 0):
+            self.entrada_sem_saida(estado_atual)
         return aux_inicio, aux_fim
 
     def entrada_sem_saida(self, estado):
-        pass
+        if(estado == self.primeiro_estado):
+            self.primeiro_estado = self.primeiro_estado.get_proxEstado()
+            self.primeiro_estado.set_anteriorEstado(None)
+        elif(estado == self.ultimo_estado):
+            self.ultimo_estado = self.ultimo_estado.get_anteriorEstado()
+            self.ultimo_estado.set_proxEstado(None)
+        else:
+            estado1 = estado.get_anteriorEstado()
+            estado2 = estado.get_proxEstado()
+            estado1.set_proxEstado(estado2)
+            estado2.set_anteriorEstado(estado1)
+        self.quantidade_estados += -1
 
     def set_string(self, string):
         for simbolo in list(set(string)):
@@ -160,18 +170,25 @@ class AFND:
         estado_atual = self.primeiro_estado
         while(estado_atual.get_proxEstado() != None):
             if(self.verificacao_automato(estado_atual.name) == True):
+                self.end()
                 return
             estado_atual = estado_atual.get_proxEstado()
         else:
-            print(estado_atual.name)
             if(self.verificacao_automato(estado_atual.name) == True):
+                self.end()
                 return
             else:
-                print("String Recusada")
+                print("String Recusada\n")
+                self.end()
+        
+    def end(self):
+        self.primeiro_estado = None
+        self.ultimo_estado = None
+        self.quantidade_estados = 0
     
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
-            print("String Aceito")
+            print("String Aceito\n")
             return True
 
 afd = AFND()
@@ -179,5 +196,6 @@ afd.set_alfabeto(['0','1'])
 afd.set_estados(['q1','q2','q3'])
 afd.set_estadoInicial('q1')
 afd.set_estadosFinais(['q2','q3'])
-afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}}) 
-afd.set_string('0000')
+afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':[]},'q3':{'0':['q2','q3'],'1':['q1']}}) 
+afd.set_string('00010')
+afd.set_string('010')
