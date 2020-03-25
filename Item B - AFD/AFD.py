@@ -63,12 +63,8 @@ class AFD:
             print("Funções de transições fora do Padrao de um AFD")
 
     def aplicacao_transicoes(self, estado_atual,simbolo):
-        for estado in self.transicoes:
-            if(estado == estado_atual):
-                for entrada in self.transicoes[estado]:
-                    if(entrada == simbolo):
-                        estado_atual = self.transicoes[estado][entrada]
-                        return estado_atual
+        estado_atual = self.transicoes[estado_atual][simbolo]
+        return estado_atual
 
     def set_string(self, string):
         for simbolo in list(set(string)):
@@ -92,4 +88,4 @@ afd.set_estados(['q1','q2','q3','q4'])
 afd.set_estadoInicial('q1')
 afd.set_estadosFinais(['q2','q4'])
 afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
-afd.set_string('110')
+afd.set_string('110001')

@@ -99,23 +99,22 @@ class AFND:
     def aplicacao_transicoes(self, simbolo,estado_atual):    
         aux_inicio = None
         aux_fim = None
-        for estados in self.transicoes:
-            if(estados == estado_atual.name):
-                for entrada in self.transicoes[estados]:
-                    if(entrada == simbolo):
-                        for i in range(len(self.transicoes[estados][entrada])):
-                            if(i == 0):
-                                estado_atual.name = self.transicoes[estados][entrada][i]
-                            else:
-                                novoEstado = estado()
-                                novoEstado.name = self.transicoes[estados][entrada][i]
-                                if((aux_inicio and aux_fim) == None):
-                                    aux_inicio = novoEstado
-                                    aux_fim = novoEstado
-                                else:
-                                    aux_fim.set_proxEstado(novoEstado)
-                                    aux_fim = novoEstado
-                        return aux_inicio, aux_fim
+        estados = estado_atual.name
+
+        for i in range(len(self.transicoes[estados][simbolo])):
+            if(i == 0):
+                estado_atual.name = self.transicoes[estados][simbolo][i]
+            else:
+                novoEstado = estado()
+                novoEstado.name = self.transicoes[estados][simbolo][i]
+                if((aux_inicio and aux_fim) == None):
+                    aux_inicio = novoEstado
+                    aux_fim = novoEstado
+                else:
+                    aux_fim.set_proxEstado(novoEstado)
+                    aux_fim = novoEstado
+                self.quantidade_estados += 1
+        return aux_inicio, aux_fim
 
     def set_string(self, string):
         for simbolo in list(set(string)):
@@ -153,3 +152,4 @@ afd.set_estadoInicial('q1')
 afd.set_estadosFinais(['q2','q1'])
 afd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q2']},'q2':{'0':['q3','q2'],'1':['q3']},'q3':{'0':['q1'],'1':['q1']}}) 
 afd.set_string('001')
+print(afd.quantidade_estados)
