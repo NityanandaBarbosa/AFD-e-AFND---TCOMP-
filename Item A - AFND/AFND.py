@@ -3,6 +3,12 @@ class estado:
         self.name = None
         self.proxEstado = None
 
+    def get_proxEstado(self):
+        return self.proxEstado
+    
+    def set_proxEstado(self, prox):
+        self.proxEstado = prox
+
 class AFND:
     def __init__(self):
         self.alfabeto = []
@@ -12,6 +18,7 @@ class AFND:
         self.estadosFinais = []
         self.primeiro_estado = None
         self.ultimo_estado = None
+        self.quantidade_estados = 0
     
     def verificar_repitidos(self, dados):
         vetor = []
@@ -49,7 +56,6 @@ class AFND:
                     check_alfabeto.append(entrada)
                     if(entrada in self.alfabeto):
                         for i in transicoes[estado][entrada]:
-                            print(i)
                             if(i not in self.estados):
                                 return False
                     else:
@@ -72,13 +78,43 @@ class AFND:
         else:
             print("Funções de transições fora do Padrao de um AFD")
 
-    def aplicacao_transicoes(self, estado_atual,simbolo):
+    def laco_transicoes(self,simbolo):
+        estado = self.primeiro_estado
+        aux_inicio = None
+        aux_fim = None
+        while estado.get_proxEstado != None:
+            aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
+            if((aux_inicio and aux_inicio) == None):
+                aux_inicio = aux1
+                aux_fim = aux2
+            else:
+                aux_fim.set_proxEstado(aux1)
+                aux_fim = aux2
+            estado = estado.get_proxEstado()
+        else:
+            aux_inicio, aux_fim = self.aplicacao_transicoes(simbolo, estado)
+        estado.set_proxEstado(aux_inicio)
+        self.ultimo_estado = aux_fim
+
+    def aplicacao_transicoes(self, simbolo,estado_atual):    
+        aux_inicio = None
+        aux_fim = None
         for estado in self.transicoes:
-            if(estado == estado_atual):
+            if(estado == estado_atual.name):
                 for entrada in self.transicoes[estado]:
                     if(entrada == simbolo):
-                        estado_atual = self.transicoes[estado][entrada]
-                        return estado_atual
+                        for i in range(len(self.transicoes[estado][entrada])):
+                            if(i == 0):
+                                estado_atual.name = self.transicoes[estado][entrada][i]
+                            else:
+                                novoEstado = estado()
+                                if((aux_inicio and aux_fim) == None):
+                                    aux_inicio = novoEstado
+                                    aux_fim = novoEstado
+                                else:
+                                    aux_fim.set_proxEstado(novoEstado)
+                                    aux_fim = novoEstado
+                        return aux_inicio, aux_fim
 
     def set_string(self, string):
         for simbolo in list(set(string)):
@@ -86,15 +122,20 @@ class AFND:
                 print("'"+ simbolo +"' nao faz parte do alfabeto")
                 return
             
-        estado_atual = self.estadoInicial
+        if(self.quantidade_estados == 0):
+            novoEstado = estado()
+            novoEstado.name = self.estadoInicial
+            self.primeiro_estado = novoEstado
+            self.ultimo_estado = novoEstado
+            self.quantidade_estados += 1
 
         for simbolo in string:
-            estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
+            self.laco_transicoes(simbolo)
     
-        if(estado_atual in self.estadosFinais):
-            print("aceito")
-        else:
-            print("Recusado")
+        #if(estado_atual in self.estadosFinais):
+        #    print("aceito")
+        #else:
+        #    print("Recusado")
 
 afd = AFND()
 afd.set_alfabeto(['0','1'])

@@ -84,7 +84,7 @@ class AFD:
         if(estado_atual in self.estadosFinais):
             print("String aceita")
         else:
-            print("Recusado")
+            print("String Recusada")
 
 afd = AFD()
 afd.set_alfabeto(['0','1'])
