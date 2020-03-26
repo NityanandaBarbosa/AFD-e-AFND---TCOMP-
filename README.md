@@ -5,12 +5,12 @@
 ```py
         afd = AFD()
 ```
-- O alfabeto de ver ser passado por meio de um vetor, caracteres repitidos serão ignorados.
+- O alfabeto dever ser passado por meio de um vetor, caracteres repetidos serão ignorados.
 
 ```py
         afd.set_alfabeto(['0','1']) 
 ```
-- O conjunto de estados devem ser passados por meio de um vetor, estados repitidos serão ignorados.
+- O conjunto de estados devem ser passados por meio de um vetor, estados repetidos serão ignorados.
 
 ```py   
         afd.set_estados(['q1','q2','q3','q4'])
@@ -20,12 +20,12 @@
 ```py
         afd.set_estadoInicial('q1')
 ```
-- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repitido serão ignorado.
+- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repetidos serão ignorado.
 
 ```py   
         afd.set_estadosFinais(['q2','q4'])
 ```
-- As funções de transição deve ser passadas por meio de um dicionario que conterá os estados e esses estados devem ter um dicionario que terá suas entradas contidas no alfabeto e suas respectivas saidas.
+- As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e suas respectivas saidas.
 
 ```py    
         afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
@@ -44,12 +44,12 @@
 ```py
         afnd = AFND()
 ```
-- O alfabeto de ver ser passado por meio de um vetor, caracteres repitidos serão ignorados.
+- O alfabeto dever ser passado por meio de um vetor, caracteres repitidos serão ignorados.
 
 ```py
         afnd.set_alfabeto(['0','1']) 
 ```
-- O conjunto de estados devem ser passados por meio de um vetor, estados repitidos serão ignorados.
+- O conjunto de estados devem ser passados por meio de um vetor, estados repetidos serão ignorados.
 
 ```py   
         afnd.set_estados(['q1','q2','q3','q4'])
@@ -59,12 +59,12 @@
 ```py
         afnd.set_estadoInicial('q1')
 ```
-- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repitido serão ignorado.
+- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repetidos serão ignorado.
 
 ```py   
         afnd.set_estadosFinais(['q2','q4'])
 ```
-- As funções de transição deve ser passadas por meio de um dicionario que conterá os estados e esses estados devem ter um dicionario que terá suas entradas contidas no alfabeto e suas respectivas saidas dentro de um vetor.
+- As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e suas respectivas saidas dentro de um vetor.
 
 ```py    
         afnd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}})  
