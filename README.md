@@ -3,7 +3,7 @@
 - Primeiro é necessário instânciar o AFD.
 
 ```py
-        afd = AFD()
+        afd = Automato()
 ```
 - O alfabeto dever ser passado por meio de um vetor, caracteres repetidos serão ignorados.
 
@@ -42,7 +42,7 @@
 - Primeiro é necessário instânciar o AFD.
 
 ```py
-        afnd = AFND()
+        afnd = Automato()
 ```
 - O alfabeto dever ser passado por meio de um vetor, caracteres repitidos serão ignorados.
 
