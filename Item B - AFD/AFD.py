@@ -79,7 +79,7 @@ class Automato:
             estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
     
         if(estado_atual in self.estadosFinais):
-            print("String aceita")
+            print("String Aceita")
             return True
         else:
             print("String Recusada")

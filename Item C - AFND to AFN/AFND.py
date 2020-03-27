@@ -190,7 +190,7 @@ class Automato:
         
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
-            print("String Aceito")
+            print("String Aceita")
             return True
 
     def end(self):
