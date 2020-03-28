@@ -125,4 +125,10 @@
 
 ```py
         convert.set_string_all("0010100000111110")
+
+        #Result :
+                Resultado AFD : 
+                String Recusada
+                Resultado AFND : 
+                String Recusada
 ```
