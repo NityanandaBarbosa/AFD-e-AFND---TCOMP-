@@ -75,3 +75,54 @@
         afnd.set_string('001') #String Recusada
         afnd.set_string('00') #String Aceita
 ```
+
+## AFND to AFD
+
+- Instanciar o AFND.
+
+```py
+        afnd = AFND.Automato()
+```
+
+- Setar um alfabeto.
+
+```py
+        afnd.set_alfabeto(['0','1'])
+```
+
+- Setar o conjunto estados.
+
+```py
+        afnd.set_estados(['q1', 'q2', 'q3'])
+```
+
+- Setar estado inicial.
+
+```py
+        afnd.set_estadoInicial('q1')
+```
+
+- Setar conjunto de estados finais.
+
+```py  
+        afnd.set_estadosFinais(['q3'])
+```
+
+- Setar o dicionario com funções de transições.
+
+```py
+        afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
+                             'q2': {'0': ['q1'], '1': ['q1','q3']},
+                             'q3': {'0': [], '1': []}})
+```
+- Instanciar convert passando como parâmetro o AFND.
+
+```py
+        convert = convert(afnd)
+```
+
+- Setar uma string que será testada no AFND e no AFD gerado.
+
+```py
+        convert.set_string_all("0010100000111110")
+```

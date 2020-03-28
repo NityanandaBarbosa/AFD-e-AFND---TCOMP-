@@ -89,30 +89,35 @@ class Automato:
         estado = self.primeiro_estado
         aux_inicio = None
         aux_fim = None
-        while estado.get_proxEstado() != None:
-            aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
-            if((aux_inicio and aux_inicio) == None):
-                aux_inicio = aux1
-                aux_fim = aux2
-            else:
-                aux_fim.set_proxEstado(aux1)
-                aux1.set_anteriorEstado(aux_fim)
-                aux_fim = aux2
-            estado = estado.get_proxEstado()
-        else: 
-            aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
-            if((aux1 and aux2) != None):
-                if((aux_inicio and aux_fim) == None):
+        if estado != None:
+            controle = False
+            while estado.get_proxEstado() != None:
+                aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
+                if((aux_inicio and aux_inicio) == None):
                     aux_inicio = aux1
                     aux_fim = aux2
                 else:
                     aux_fim.set_proxEstado(aux1)
-                    aux1.set_anteriorEstado(aux_fim)
-                    aux_fim = aux2
-        if((aux_inicio and aux_fim) != None):
-            estado.set_proxEstado(aux_inicio)
-            aux_inicio.set_anteriorEstado(estado)
-            self.ultimo_estado = aux_fim
+                    if aux1 != None:
+                        aux1.set_anteriorEstado(aux_fim)
+                        aux_fim = aux2
+                estado = estado.get_proxEstado()
+                if(estado == None):
+                    break
+            else: 
+                aux1, aux2 = self.aplicacao_transicoes(simbolo, estado)
+                if((aux1 and aux2) != None):
+                    if((aux_inicio and aux_fim) == None):
+                        aux_inicio = aux1
+                        aux_fim = aux2
+                    else:
+                        aux_fim.set_proxEstado(aux1)
+                        aux1.set_anteriorEstado(aux_fim)
+                        aux_fim = aux2
+            if((aux_inicio and aux_fim) != None):
+                estado.set_proxEstado(aux_inicio)
+                aux_inicio.set_anteriorEstado(estado)
+                self.ultimo_estado = aux_fim
         
 
     def aplicacao_transicoes(self, simbolo,estado_atual):    
@@ -190,10 +195,20 @@ class Automato:
         
     def verificacao_automato(self, estado):
         if(estado in self.estadosFinais):
-            print("String Aceito")
+            print("String Aceita")
             return True
 
     def end(self):
         self.primeiro_estado = None
         self.ultimo_estado = None
         self.quantidade_estados = 0
+
+afnd = Automato()
+afnd.set_alfabeto(['0','1'])
+afnd.set_estados(['q1', 'q2', 'q3'])
+afnd.set_estadoInicial('q1')
+afnd.set_estadosFinais(['q3'])
+afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
+                    'q2': {'0': ['q1'], '1': ['q1','q3']},
+                    'q3': {'0': [], '1': []}})
+afnd.set_string("00101010000011111")

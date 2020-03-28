@@ -1,10 +1,11 @@
 import AFND, AFD
 
-class converter():
+class convert():
     
     def __init__(self, afnd):
         self.afnd = afnd
         self.afd = AFD.Automato()
+        self.conversao()
 
     def conversao(self):
         self.afd.set_alfabeto(self.afnd.alfabeto)
@@ -27,14 +28,15 @@ class converter():
                     for j in aux:
                         if j in self.afnd.estadosFinais:
                             if(aux not in self.afd.estadosFinais):
-                                print(aux)
+                                #print(aux)
                                 self.afd.estadosFinais.append(aux)
                 else:
                     vetor = []
+                    #print(self.afd.estados, quantidade)
                     for estado in self.afd.estados[quantidade]:
-                       for j in self.afnd.transicoes[estado][i]:
-                           if j not in vetor:
-                               vetor.append(j)
+                        for j in self.afnd.transicoes[estado][i]:
+                            if j not in vetor:
+                                vetor.append(j)
                     vetor.sort()
                     for j in vetor:
                         if j in self.afnd.estadosFinais:
@@ -52,8 +54,9 @@ class converter():
                     else:
                         #print("contou")
                         cont += 1
-                if cont == len(self.afd.alfabeto):
-                    controle = True     
+                if cont == len(saidas):
+                    if(len(saida)/len(self.afd.estados) == len(self.afd.alfabeto)):
+                        controle = True     
             if(controle == False):
                 quantidade += 1
         
@@ -70,6 +73,7 @@ class converter():
 
         dic = {}
         count = 0
+
         for i in self.afd.estados:
             dic[i] = {}
             for j in self.afd.alfabeto:
@@ -77,9 +81,9 @@ class converter():
                 count += 1
         self.afd.set_transicoes(dic)
 
-        print(self.afd.estados)
-        print(self.afd.estadosFinais)
-        print(self.afd.transicoes)
+        #print(self.afd.estados)
+        #print(saida)
+        #print(self.afd.transicoes)
         
 
     def set_string_all(self, string):
@@ -90,12 +94,13 @@ class converter():
 
 afnd = AFND.Automato()
 afnd.set_alfabeto(['0','1'])
-afnd.set_estados(['q1','q2','q3'])
+afnd.set_estados(['q1', 'q2', 'q3'])
 afnd.set_estadoInicial('q1')
-afnd.set_estadosFinais(['q2'])
-afnd.set_transicoes({'q1':{'0':['q3'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q3']},'q3':{'0':['q1'],'1':['q2']}}) 
+afnd.set_estadosFinais(['q3'])
+afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
+                    'q2': {'0': ['q1'], '1': ['q1','q3']},
+                    'q3': {'0': [], '1': []}})
 
-convert = converter(afnd)
-convert.conversao()
-convert.set_string_all("01")
+convert = convert(afnd)
+convert.set_string_all("0010100000111110")
 
