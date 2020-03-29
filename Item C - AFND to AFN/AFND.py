@@ -40,6 +40,7 @@ class Automato:
     def set_estados(self, estados):
         self.estados = self.verificar_repitidos(estados)
         self.estados.sort()
+        self.alfabeto.append("epsilon")
     
     def set_estadoInicial(self, estado):
         if estado in self.estados:
@@ -55,7 +56,6 @@ class Automato:
     
     def verificar_transicoes(self, transicoes):
         estados_transições = []
-
         for estado in transicoes:
             check_estados = []; estados_transições.append(estado)
             if(estado not in check_estados and estado in self.estados):
@@ -119,6 +119,18 @@ class Automato:
                 aux_inicio.set_anteriorEstado(estado)
                 self.ultimo_estado = aux_fim
         
+    def transicao_epsilon(self,estado_atual):
+        if(self.transicoes[estado_atual]["epsilon"] != []):
+            for i in range(len(self.transicoes[estado_atual]["epsilon"])):
+                #print(self.transicoes[estado_atual]["epsilon"][i])
+                novoEstado = estado()
+                novoEstado.name = self.transicoes[estado_atual]["epsilon"][i]
+                #while(self.transicoes[novoEstado.name]["epsilon"] != []):
+                #    novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][0]
+                self.ultimo_estado.set_proxEstado(novoEstado)
+                novoEstado.set_anteriorEstado(self.ultimo_estado)
+                self.ultimo_estado = novoEstado
+                self.quantidade_estados += 1
 
     def aplicacao_transicoes(self, simbolo,estado_atual):    
         aux_inicio = None
@@ -128,6 +140,8 @@ class Automato:
         for i in range(len(self.transicoes[estados][simbolo])):
             if(i == 0):
                 estado_atual.name = self.transicoes[estados][simbolo][i]
+                self.transicao_epsilon(estado_atual.name)
+                
             else:
                 novoEstado = estado()
                 novoEstado.name = self.transicoes[estados][simbolo][i]
@@ -176,11 +190,13 @@ class Automato:
 
         if(estado_atual != None):
             while(estado_atual.get_proxEstado() != None):
+                #print(estado_atual.name)
                 if(self.verificacao_automato(estado_atual.name) == True):
                     self.end()
                     return True
                 estado_atual = estado_atual.get_proxEstado()
             else:
+                #print(estado_atual.name)
                 if(self.verificacao_automato(estado_atual.name) == True):
                     self.end()
                     return True

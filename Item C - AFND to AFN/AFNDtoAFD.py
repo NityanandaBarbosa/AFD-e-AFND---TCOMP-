@@ -102,5 +102,5 @@ afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
                     'q3': {'0': [], '1': []}})
 
 convert = convert(afnd)
-convert.set_string_all("0010100000111110")
+convert.set_string_all("01")
 
