@@ -83,7 +83,7 @@ class Automato:
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
         else:
-            print("Funções de transições fora do Padrao de um AFD")
+            print("Funções de transições fora do Padrao de um AFnD")
 
     def laco_transicoes(self,simbolo):
         estado = self.primeiro_estado

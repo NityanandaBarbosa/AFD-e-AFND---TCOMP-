@@ -5,10 +5,10 @@ class convert():
     def __init__(self, afnd):
         self.afnd = afnd
         self.afd = AFD.Automato()
+        self.afd.set_alfabeto(self.afnd.alfabeto)
         self.conversao()
 
     def conversao(self):
-        self.afd.set_alfabeto(self.afnd.alfabeto)
         self.afd.estados.append([self.afnd.estadoInicial])
         self.afd.estadoInicial = self.afnd.estadoInicial
         saida = []
@@ -81,9 +81,9 @@ class convert():
                 count += 1
         self.afd.set_transicoes(dic)
 
-        #print(self.afd.estados)
-        #print(saida)
-        #print(self.afd.transicoes)
+        print(self.afd.estados)
+        print(saida)
+        print(self.afd.transicoes)
         
 
     def set_string_all(self, string):
@@ -94,13 +94,16 @@ class convert():
 
 afnd = AFND.Automato()
 afnd.set_alfabeto(['0','1'])
-afnd.set_estados(['q1', 'q2', 'q3'])
-afnd.set_estadoInicial('q1')
-afnd.set_estadosFinais(['q3'])
-afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
-                    'q2': {'0': ['q1'], '1': ['q1','q3']},
-                    'q3': {'0': [], '1': []}})
+afnd.set_estados(['a','b','c','d','e','f'])
+afnd.set_estadoInicial('a')
+afnd.set_estadosFinais(['d'])
+afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
+                    'b': {'0': [], '1': ['c'],'epsilon':['d']},
+                    'c': {'0': [],'1':['d'],'epsilon':[]},
+                    'd': {'0': [], '1': [],'epsilon':[]},
+                    'e': {'0': ['f'], '1': [],'epsilon':[]},
+                    'f': {'0': ['d'], '1': [],'epsilon':[]}})
 
 convert = convert(afnd)
-convert.set_string_all("01")
+convert.set_string_all("1")
 

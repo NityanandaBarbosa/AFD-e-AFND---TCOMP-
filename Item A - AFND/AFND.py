@@ -83,7 +83,7 @@ class Automato:
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
         else:
-            print("Funções de transições fora do Padrao de um AFD")
+            print("Funções de transições fora do Padrao de um AFND")
 
     def laco_transicoes(self,simbolo):
         estado = self.primeiro_estado
@@ -125,8 +125,8 @@ class Automato:
                 #print(self.transicoes[estado_atual]["epsilon"][i])
                 novoEstado = estado()
                 novoEstado.name = self.transicoes[estado_atual]["epsilon"][i]
-                #while(self.transicoes[novoEstado.name]["epsilon"] != []):
-                #    novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][0]
+                while(self.transicoes[novoEstado.name]["epsilon"] != []):
+                    novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][0]
                 self.ultimo_estado.set_proxEstado(novoEstado)
                 novoEstado.set_anteriorEstado(self.ultimo_estado)
                 self.ultimo_estado = novoEstado
@@ -221,10 +221,13 @@ class Automato:
 
 afnd = Automato()
 afnd.set_alfabeto(['0','1'])
-afnd.set_estados(['q1', 'q2', 'q3'])
-afnd.set_estadoInicial('q1')
-afnd.set_estadosFinais(['q3'])
-afnd.set_transicoes({'q1': {'0': ['q1'], '1': ['q2'],'epsilon':[]},
-                    'q2': {'0': ['q1'], '1': ['q1','q3'],'epsilon':['q3','q1']},
-                    'q3': {'0': ['q1'],'1':[],'epsilon':[]}})               
-afnd.set_string("1")
+afnd.set_estados(['a','b','c','d','e','f'])
+afnd.set_estadoInicial('a')
+afnd.set_estadosFinais(['d'])
+afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
+                    'b': {'0': [], '1': ['b'],'epsilon':['d']},
+                    'c': {'0': [],'1':['d'],'epsilon':[]},
+                    'd': {'0': [], '1': [],'epsilon':[]},
+                    'e': {'0': ['f'], '1': [],'epsilon':['b','c']},
+                    'f': {'0': ['d'], '1': [],'epsilon':[]}})             
+afnd.set_string("000")
