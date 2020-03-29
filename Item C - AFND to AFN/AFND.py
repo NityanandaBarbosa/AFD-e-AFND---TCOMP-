@@ -83,7 +83,7 @@ class Automato:
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
         else:
-            print("Funções de transições fora do Padrao de um AFnD")
+            print("Funções de transições fora do Padrao de um AFND")
 
     def laco_transicoes(self,simbolo):
         estado = self.primeiro_estado
@@ -118,20 +118,46 @@ class Automato:
                 estado.set_proxEstado(aux_inicio)
                 aux_inicio.set_anteriorEstado(estado)
                 self.ultimo_estado = aux_fim
-        
-    def transicao_epsilon(self,estado_atual):
-        if(self.transicoes[estado_atual]["epsilon"] != []):
-            for i in range(len(self.transicoes[estado_atual]["epsilon"])):
-                #print(self.transicoes[estado_atual]["epsilon"][i])
-                novoEstado = estado()
-                novoEstado.name = self.transicoes[estado_atual]["epsilon"][i]
-                #while(self.transicoes[novoEstado.name]["epsilon"] != []):
-                #    novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][0]
-                self.ultimo_estado.set_proxEstado(novoEstado)
-                novoEstado.set_anteriorEstado(self.ultimo_estado)
-                self.ultimo_estado = novoEstado
-                self.quantidade_estados += 1
 
+    def organicacao_epsilon(self, estado, inicio_fila, fim_fila):
+        if((inicio_fila and fim_fila) == None):
+            inicio_fila = estado
+            fim_fila = estado
+        else:
+            fim_fila.set_proxEstado(estado)
+            estado.set_anteriorEstado(fim_fila)
+            estado.set_anteriorEstado(fim_fila)
+            fim_fila = estado
+        return inicio_fila,fim_fila
+
+
+    def transicao_epsilon(self,estado_atual):
+        inicio_fila = None
+        fim_fila = None
+        controle = False
+
+        for i in range(len(self.transicoes[estado_atual]["epsilon"])):
+            novoEstado = estado()
+            novoEstado.name = self.transicoes[estado_atual]["epsilon"][i]
+            while(self.transicoes[novoEstado.name]["epsilon"] != []):
+                guarda_estado = novoEstado.name
+                for j in range(len(self.transicoes[novoEstado.name]["epsilon"])):
+                    if(j>0):
+                        newEstado = estado()
+                        newEstado.name = self.transicoes[guarda_estado]["epsilon"][j]
+                        inicio_fila, fim_fila = self.organicacao_epsilon(newEstado,inicio_fila,fim_fila)
+                    else:
+                        novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][j]
+                        #print(novoEstado.name)
+                        inicio_fila, fim_fila = self.organicacao_epsilon(novoEstado,inicio_fila,fim_fila)
+                        controle = True
+                    self.quantidade_estados += 1
+            else:
+                if(controle == False):
+                    inicio_fila, fim_fila = self.organicacao_epsilon(novoEstado,inicio_fila,fim_fila)
+                    self.quantidade_estados += 1
+        return inicio_fila,fim_fila
+ 
     def aplicacao_transicoes(self, simbolo,estado_atual):    
         aux_inicio = None
         aux_fim = None
@@ -140,11 +166,20 @@ class Automato:
         for i in range(len(self.transicoes[estados][simbolo])):
             if(i == 0):
                 estado_atual.name = self.transicoes[estados][simbolo][i]
-                self.transicao_epsilon(estado_atual.name)
-                
+                #print(estado_atual.name)
+                inicio_epsilon, fim_epsilon = self.transicao_epsilon(estado_atual.name) 
+                if((aux_inicio and aux_fim) == None):
+                    aux_inicio = inicio_epsilon
+                    aux_fim = fim_epsilon
+                else:  
+                    print(inicio_epsilon.name, fim_epsilon.name)
+                    aux_fim.set_proxEstado(inicio_epsilon)
+                    inicio_epsilon.set_anteriorEstado(aux_fim)
+                    aux_fim =fim_epsilon    
             else:
                 novoEstado = estado()
                 novoEstado.name = self.transicoes[estados][simbolo][i]
+                inicio_epsilon, fim_epsilon = self.transicao_epsilon(novoEstado.name)
                 if((aux_inicio and aux_fim) == None):
                     aux_inicio = novoEstado
                     aux_fim = novoEstado
@@ -152,6 +187,10 @@ class Automato:
                     aux_fim.set_proxEstado(novoEstado)
                     novoEstado.set_anteriorEstado(aux_fim)
                     aux_fim = novoEstado
+                if((inicio_epsilon and fim_epsilon) != None):
+                    aux_fim.set_proxEstado(inicio_epsilon)
+                    inicio_epsilon.set_anteriorEstado(aux_fim)
+                    aux_fim =fim_epsilon
                 self.quantidade_estados += 1
         if(len(self.transicoes[estados][simbolo]) == 0):
             self.entrada_sem_saida(estado_atual)

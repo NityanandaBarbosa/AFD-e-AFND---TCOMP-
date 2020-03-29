@@ -28,7 +28,10 @@
 - As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e suas respectivas saidas.
 
 ```py    
-        afd.set_transicoes({'q1':{'0':'q3','1':'q2'},'q2':{'0':'q1','1':'q4'},'q3':{'0':'q2','1':'q4'},'q4':{'0':'q4','1':'q1'}}) 
+        afd.set_transicoes({'q1':{'0':'q3','1':'q2'},
+                            'q2':{'0':'q1','1':'q4'},
+                            'q3':{'0':'q2','1':'q4'},
+                            'q4':{'0':'q4','1':'q1'}}) 
 ```
 - A string que será testado não pode conter caracteres que diferentes do alfabeto.
 
@@ -52,28 +55,33 @@
 - O conjunto de estados devem ser passados por meio de um vetor, estados repetidos serão ignorados.
 
 ```py   
-        afnd.set_estados(['q1','q2','q3','q4'])
+        afnd.set_estados(['a','b','c','d','e','f'])
 ```
 - O estado inicial deve está contido nos estados e deve ser passado como uma string.
 
 ```py
-        afnd.set_estadoInicial('q1')
+        afnd.set_estadoInicial('a')
 ```
 - O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repetidos serão ignorado.
 
 ```py   
-        afnd.set_estadosFinais(['q2','q4'])
+        afnd.set_estadosFinais(['a','c','f'])
 ```
 - As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e suas respectivas saidas dentro de um vetor.
 
 ```py    
-        afnd.set_transicoes({'q1':{'0':['q3','q2'],'1':['q1']},'q2':{'0':['q3','q2'],'1':['q1']},'q3':{'0':['q2','q3'],'1':['q1']}})  
+        afnd.set_transicoes({'a': {'0': ['f'], '1': ['b'],'epsilon':[]},
+                             'b': {'0': [], '1': ['b'],'epsilon':['e']},
+                             'c': {'0': [],'1':['d'],'epsilon':[]},
+                             'd': {'0': [], '1': ['f'],'epsilon':[]},
+                             'e': {'0': [], '1': ["c"],'epsilon':['c']},
+                             'f': {'0': ['f'], '1': ["c"],'epsilon':['a']}})  
 ```
 - A string que será testado não pode conter caracteres que diferentes do alfabeto.
 
 ```py
-        afnd.set_string('001') #String Recusada
-        afnd.set_string('00') #String Aceita
+        afnd.set_string("1")  #String Recusada
+        afnd.set_string("10") #String Aceita
 ```
 
 ## AFND to AFD
@@ -93,27 +101,30 @@
 - Setar o conjunto estados.
 
 ```py
-        afnd.set_estados(['q1', 'q2', 'q3'])
+        afnd.set_estados(['a','b','c','d','e','f'])
 ```
 
 - Setar estado inicial.
 
 ```py
-        afnd.set_estadoInicial('q1')
+        afnd.set_estadoInicial('a')
 ```
 
 - Setar conjunto de estados finais.
 
 ```py  
-        afnd.set_estadosFinais(['q3'])
+        afnd.set_estadosFinais(['a','c','f'])
 ```
 
 - Setar o dicionario com funções de transições.
 
 ```py
-        afnd.set_transicoes({'q1': {'0': ['q1','q2'], '1': ['q2']},
-                             'q2': {'0': ['q1'], '1': ['q1','q3']},
-                             'q3': {'0': [], '1': []}})
+        afnd.set_transicoes({'a': {'0': ['f'], '1': ['b'],'epsilon':[]},
+                             'b': {'0': [], '1': ['b'],'epsilon':['e']},
+                             'c': {'0': [],'1':['d'],'epsilon':[]},
+                             'd': {'0': [], '1': ['f'],'epsilon':[]},
+                             'e': {'0': [], '1': ["c"],'epsilon':['c']},
+                             'f': {'0': ['f'], '1': ["c"],'epsilon':['a']}})
 ```
 - Instanciar convert passando como parâmetro o AFND.
 
