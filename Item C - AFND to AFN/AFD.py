@@ -58,13 +58,13 @@ class Automato:
         return True
 
     def set_transicoes(self, transicoes):
+        del(self.alfabeto[-1])
         if(self.verificar_transicoes(transicoes) == True):
             self.transicoes = transicoes
         else:
             print("Funções de transições fora do Padrao de um AFD")
 
     def aplicacao_transicoes(self, estado_atual,simbolo):
-        print(self.transicoes)
         estado_atual = self.transicoes[estado_atual][simbolo]
         return estado_atual
 
@@ -73,7 +73,6 @@ class Automato:
             if(simbolo not in self.alfabeto):
                 print("'"+ simbolo +"' nao faz parte do alfabeto")
                 return
-            
         estado_atual = self.estadoInicial
 
         for simbolo in string:

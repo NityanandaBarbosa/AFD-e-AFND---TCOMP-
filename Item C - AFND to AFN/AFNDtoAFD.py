@@ -82,11 +82,18 @@ class convert():
                     if(j != "epsilon"):
                         dic[i][j] = saida[count]
                         count += 1
-        self.afd.set_transicoes(dic)
         
+        self.afd.set_transicoes(dic)
+
         #print(self.afd.estados)
         #print(saida)
         #print(self.afd.transicoes)
+
+    def set_string_all(self, string):
+        print("Resultado AFD : ")
+        self.afd.set_string(string)
+        print("Resultado AFND : ")
+        self.afnd.set_string(string)
 
     def transicaoEpsilon(self, aux):
         controle = False
@@ -118,11 +125,7 @@ class convert():
         return vetor
                                         
 
-    def set_string_all(self, string):
-        print("Resultado AFD : ")
-        self.afd.set_string(string)
-        print("Resultado AFND : ")
-        self.afnd.set_string(string)
+    
 
 afnd = AFND.Automato()
 afnd.set_alfabeto(['0','1'])
@@ -138,5 +141,5 @@ afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
 
 
 convert = convert(afnd)
-convert.set_string_all("01")
+convert.set_string_all("111")
 
