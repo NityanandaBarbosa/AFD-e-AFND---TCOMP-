@@ -64,6 +64,7 @@ class Automato:
             print("Funções de transições fora do Padrao de um AFD")
 
     def aplicacao_transicoes(self, estado_atual,simbolo):
+        print(self.transicoes)
         estado_atual = self.transicoes[estado_atual][simbolo]
         return estado_atual
 

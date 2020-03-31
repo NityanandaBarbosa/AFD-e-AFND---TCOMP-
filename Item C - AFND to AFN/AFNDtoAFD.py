@@ -18,44 +18,45 @@ class convert():
         while(controle == False):
             saidas = []
             for i in self.afnd.alfabeto:
-                if(quantidade == 0):
-                    self.afnd.transicoes[self.afd.estadoInicial][i].sort()
-                    aux = self.afnd.transicoes[self.afd.estadoInicial][i]
-                    if aux not in self.afd.estados:
-                        self.afd.estados.append(aux)         
-                    saida.append(aux)
-                    saidas.append(saida)
-                    for j in aux:
-                        if j in self.afnd.estadosFinais:
-                            if(aux not in self.afd.estadosFinais):
-                                #print(aux)
-                                self.afd.estadosFinais.append(aux)
-                else:
-                    vetor = []
-                    #print(self.afd.estados, quantidade)
-                    for estado in self.afd.estados[quantidade]:
-                        for j in self.afnd.transicoes[estado][i]:
-                            if j not in vetor:
-                                vetor.append(j)
-                    vetor.sort()
-                    for j in vetor:
-                        if j in self.afnd.estadosFinais:
-                            if(vetor not in self.afd.estadosFinais):
-                                self.afd.estadosFinais.append(vetor)
-                    saida.append(vetor)   
-                    saidas.append(vetor)
-            
+                if(i != "epsilon"):
+                    if(quantidade == 0):
+                        self.afnd.transicoes[self.afd.estadoInicial][i].sort()
+                        aux = self.afnd.transicoes[self.afd.estadoInicial][i]
+                        aux = self.transicaoEpsilon(aux)
+                        if aux not in self.afd.estados:
+                            self.afd.estados.append(aux)         
+                        saida.append(aux)
+                        saidas.append(saida)
+                        #print(saidas)
+                        for j in aux:
+                            if j in self.afnd.estadosFinais:
+                                if(aux not in self.afd.estadosFinais):
+                                    self.afd.estadosFinais.append(aux)
+                    else:
+                        vetor = []
+                        for estado in self.afd.estados[quantidade]:
+                            for j in self.afnd.transicoes[estado][i]:
+                                if j not in vetor:
+                                    vetor.append(j)
+                        vetor.sort()
+                        vetor = self.transicaoEpsilon(vetor)
+                        for j in vetor:
+                            if j in self.afnd.estadosFinais:
+                                if(vetor not in self.afd.estadosFinais):
+                                    self.afd.estadosFinais.append(vetor)
+                        saida.append(vetor)   
+                        saidas.append(vetor)
+                
             cont = 0
             if(quantidade > 0):
                 for j in saidas:
                     if j not in self.afd.estados:
-                        #print("entrou")
                         self.afd.estados.append(j)
                     else:
-                        #print("contou")
                         cont += 1
                 if cont == len(saidas):
-                    if(len(saida)/len(self.afd.estados) == len(self.afd.alfabeto)):
+                    #print(len(saida), len(self.afd.estados))
+                    if(len(saida)/len(self.afd.estados) == len(self.afd.alfabeto) - 1):
                         controle = True     
             if(controle == False):
                 quantidade += 1
@@ -75,16 +76,47 @@ class convert():
         count = 0
 
         for i in self.afd.estados:
-            dic[i] = {}
-            for j in self.afd.alfabeto:
-                dic[i][j] = saida[count]
-                count += 1
+            if(i != "epsilon"):
+                dic[i] = {}
+                for j in self.afd.alfabeto:
+                    if(j != "epsilon"):
+                        dic[i][j] = saida[count]
+                        count += 1
         self.afd.set_transicoes(dic)
-
-        print(self.afd.estados)
-        print(saida)
-        print(self.afd.transicoes)
         
+        #print(self.afd.estados)
+        #print(saida)
+        #print(self.afd.transicoes)
+
+    def transicaoEpsilon(self, aux):
+        controle = False
+        vetor = []
+        for i in aux:
+            vetor.append(i)
+        for estado in aux:
+            for posicao in range(len(self.afnd.transicoes[estado]["epsilon"])):
+                novoValor = self.afnd.transicoes[estado]["epsilon"][posicao]
+                if(novoValor not in vetor):
+                    vetor.append(novoValor)
+                if(posicao == len(self.afnd.transicoes[estado]["epsilon"])):
+                    controle = True
+                while(self.afnd.transicoes[novoValor]["epsilon"] != []):
+                    guarda_estado = novoValor
+                    for j in range(len(self.afnd.transicoes[novoValor]["epsilon"])):
+                        if(j>0):
+                            newValor = self.afnd.transicoes[guarda_estado]["epsilon"][j]
+                            if(newValor not in vetor):
+                                vetor.append(newValor)
+                        else:
+                            novoValor = self.afnd.transicoes[novoValor]["epsilon"][j]
+                            if(novoValor not in vetor):
+                                vetor.append(novoValor)
+                else:
+                    if(controle == False):
+                        if(novoValor not in vetor):
+                                vetor.append(novoValor)
+        return vetor
+                                        
 
     def set_string_all(self, string):
         print("Resultado AFD : ")
@@ -96,14 +128,15 @@ afnd = AFND.Automato()
 afnd.set_alfabeto(['0','1'])
 afnd.set_estados(['a','b','c','d','e','f'])
 afnd.set_estadoInicial('a')
-afnd.set_estadosFinais(['a','c','f'])
-afnd.set_transicoes({'a': {'0': ['f'], '1': ['b'],'epsilon':[]},
-                    'b': {'0': [], '1': ['b'],'epsilon':['e']},
+afnd.set_estadosFinais(['d'])
+afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
+                    'b': {'0': [], '1': ['c'],'epsilon':['d']},
                     'c': {'0': [],'1':['d'],'epsilon':[]},
-                    'd': {'0': [], '1': ['f'],'epsilon':[]},
-                    'e': {'0': [], '1': ["c"],'epsilon':['c']},
-                    'f': {'0': ['f'], '1': ["c"],'epsilon':['a']}})             
+                    'd': {'0': [], '1': [],'epsilon':[]},
+                    'e': {'0': ['f'], '1': [],'epsilon':['b','c']},
+                    'f': {'0': ['d'], '1': [],'epsilon':[]}})           
+
 
 convert = convert(afnd)
-convert.set_string_all("1")
+convert.set_string_all("01")
 

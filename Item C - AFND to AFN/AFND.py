@@ -135,10 +135,11 @@ class Automato:
         inicio_fila = None
         fim_fila = None
         controle = False
-
         for i in range(len(self.transicoes[estado_atual]["epsilon"])):
             novoEstado = estado()
             novoEstado.name = self.transicoes[estado_atual]["epsilon"][i]
+            if(i == len(self.transicoes[estado_atual]["epsilon"])):
+                controle = True
             while(self.transicoes[novoEstado.name]["epsilon"] != []):
                 guarda_estado = novoEstado.name
                 for j in range(len(self.transicoes[novoEstado.name]["epsilon"])):
@@ -150,7 +151,6 @@ class Automato:
                         novoEstado.name = self.transicoes[novoEstado.name]["epsilon"][j]
                         #print(novoEstado.name)
                         inicio_fila, fim_fila = self.organicacao_epsilon(novoEstado,inicio_fila,fim_fila)
-                        controle = True
                     self.quantidade_estados += 1
             else:
                 if(controle == False):
@@ -166,7 +166,6 @@ class Automato:
         for i in range(len(self.transicoes[estados][simbolo])):
             if(i == 0):
                 estado_atual.name = self.transicoes[estados][simbolo][i]
-                #print(estado_atual.name)
                 inicio_epsilon, fim_epsilon = self.transicao_epsilon(estado_atual.name) 
                 if((aux_inicio and aux_fim) == None):
                     aux_inicio = inicio_epsilon
@@ -175,7 +174,7 @@ class Automato:
                     print(inicio_epsilon.name, fim_epsilon.name)
                     aux_fim.set_proxEstado(inicio_epsilon)
                     inicio_epsilon.set_anteriorEstado(aux_fim)
-                    aux_fim =fim_epsilon    
+                    aux_fim =fim_epsilon
             else:
                 novoEstado = estado()
                 novoEstado.name = self.transicoes[estados][simbolo][i]
@@ -191,6 +190,7 @@ class Automato:
                     aux_fim.set_proxEstado(inicio_epsilon)
                     inicio_epsilon.set_anteriorEstado(aux_fim)
                     aux_fim =fim_epsilon
+
                 self.quantidade_estados += 1
         if(len(self.transicoes[estados][simbolo]) == 0):
             self.entrada_sem_saida(estado_atual)
