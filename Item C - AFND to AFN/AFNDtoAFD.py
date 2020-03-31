@@ -141,5 +141,5 @@ afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
 
 
 convert = convert(afnd)
-convert.set_string_all("111")
+convert.set_string_all("101")
 

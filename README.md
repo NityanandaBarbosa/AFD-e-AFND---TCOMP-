@@ -113,18 +113,18 @@
 - Setar conjunto de estados finais.
 
 ```py  
-        afnd.set_estadosFinais(['a','c','f'])
+        afnd.set_estadosFinais(['d'])
 ```
 
 - Setar o dicionario com funções de transições.
 
 ```py
-        afnd.set_transicoes({'a': {'0': ['f'], '1': ['b'],'epsilon':[]},
-                             'b': {'0': [], '1': ['b'],'epsilon':['e']},
+        afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
+                             'b': {'0': [], '1': ['c'],'epsilon':['d']},
                              'c': {'0': [],'1':['d'],'epsilon':[]},
-                             'd': {'0': [], '1': ['f'],'epsilon':[]},
-                             'e': {'0': [], '1': ["c"],'epsilon':['c']},
-                             'f': {'0': ['f'], '1': ["c"],'epsilon':['a']}})
+                             'd': {'0': [], '1': [],'epsilon':[]},
+                             'e': {'0': ['f'], '1': [],'epsilon':['b','c']},
+                             'f': {'0': ['d'], '1': [],'epsilon':[]}})
 ```
 - Instanciar convert passando como parâmetro o AFND.
 
@@ -135,7 +135,7 @@
 - Setar uma string que será testada no AFND e no AFD gerado.
 
 ```py
-        convert.set_string_all("0010100000111110")
+        convert.set_string_all("101")
 
         #Result :
                 Resultado AFD : 
