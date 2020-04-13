@@ -67,7 +67,7 @@
 ```py   
         afnd.set_estadosFinais(['a','c','f'])
 ```
-- As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e suas respectivas saidas dentro de um vetor.
+- As funções de transição deve ser passadas por meio de um dicionário que conterá os estados e esses estados devem ter um dicionário que terá suas entradas contidas no alfabeto e o epsilon e suas respectivas saidas dentro de um vetor.
 
 ```py    
         afnd.set_transicoes({'a': {'0': ['f'], '1': ['b'],'epsilon':[]},
@@ -111,7 +111,7 @@
                              'c': {'0': [],'1':['d'],'epsilon':[]},
                              'd': {'0': [], '1': [],'epsilon':[]},
                              'e': {'0': ['f'], '1': [],'epsilon':['b','c']},
-                             'f': {'0': ['d'], '1': [],'epsilon':[]}})
+                             'f': {'0': ['d'], '1': [],'epsilon':[]}}) 
 ```
 - Instanciar convert passando como parâmetro o AFND.
 
@@ -122,11 +122,24 @@
 - Setar uma string que será testada no AFND e no AFD gerado.
 
 ```py
-        convert.set_string_all("101")
-
+        convert.set_string_all("1101")
         #Result :
                 Resultado AFD : 
                 String Recusada
                 Resultado AFND : 
                 String Recusada
+        
+        convert.set_string_all("111")
+        #Result :
+                Resultado AFD : 
+                String Aceita
+                Resultado AFND : 
+                String Aceita
+
+        convert.set_string_all("0")
+        #Result :
+                Resultado AFD : 
+                String Aceita
+                Resultado AFND : 
+                String Aceita
 ```

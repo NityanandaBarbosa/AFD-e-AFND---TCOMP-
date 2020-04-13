@@ -124,21 +124,3 @@ class convert():
                         if(novoValor not in vetor):
                                 vetor.append(novoValor)
         return vetor
-                                        
-
-afnd = AFND.Automato()
-afnd.set_alfabeto(['0','1'])
-afnd.set_estados(['a','b','c','d','e','f'])
-afnd.set_estadoInicial('a')
-afnd.set_estadosFinais(['d'])
-afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
-                    'b': {'0': [], '1': ['c'],'epsilon':['d']},
-                    'c': {'0': [],'1':['d'],'epsilon':[]},
-                    'd': {'0': [], '1': [],'epsilon':[]},
-                    'e': {'0': ['f'], '1': [],'epsilon':['b','c']},
-                    'f': {'0': ['d'], '1': [],'epsilon':[]}})           
-
-
-convert = convert(afnd)
-convert.set_string_all("1101")
-
