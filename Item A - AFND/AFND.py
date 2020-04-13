@@ -45,6 +45,8 @@ class Automato:
     def set_estadoInicial(self, estado):
         if estado in self.estados:
             self.estadoInicial = estado
+        else:
+            print("Estado inicial invalido")
     
     def set_estadosFinais(self, estados):
         estados = self.verificar_repitidos(estados)
@@ -216,6 +218,9 @@ class Automato:
                 return
             
         if(self.quantidade_estados == 0):
+            if(self.estadoInicial == None):
+                print("Automato não possui estado inicial")
+                return
             novoEstado = estado()
             novoEstado.name = self.estadoInicial
             self.primeiro_estado = novoEstado
@@ -256,4 +261,4 @@ class Automato:
     def end(self):
         self.primeiro_estado = None
         self.ultimo_estado = None
-        self.quantidade_estados = 0
+        self.quantidade_estados = 0                     

@@ -23,6 +23,8 @@ class Automato:
     def set_estadoInicial(self, estado):
         if estado in self.estados:
             self.estadoInicial = estado
+        else:
+            print("Estado inicial invalido")
     
     def set_estadosFinais(self, estados):
         estados = self.verificar_repitidos(estados)
@@ -74,13 +76,15 @@ class Automato:
                 return
             
         estado_atual = self.estadoInicial
-
-        for simbolo in string:
-            estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
-    
-        if(estado_atual in self.estadosFinais):
-            print("String Aceita")
-            return True
+        if(estado_atual != None):
+            for simbolo in string:
+                estado_atual = self.aplicacao_transicoes(estado_atual, simbolo)
+        
+            if(estado_atual in self.estadosFinais):
+                print("String Aceita")
+                return True
+            else:
+                print("String Recusada")
+                return False
         else:
-            print("String Recusada")
-            return False
+            print("Automato não possui estado inicial")

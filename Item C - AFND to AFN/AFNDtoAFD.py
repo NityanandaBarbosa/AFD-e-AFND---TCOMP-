@@ -9,10 +9,11 @@ class convert():
         self.conversao()
 
     def conversao(self):
+        if(self.afnd.estadoInicial == None):
+            return
         self.afd.estados.append(self.transicaoEpsilon([self.afnd.estadoInicial]))
         self.afd.estadoInicial = self.transicaoEpsilon([self.afnd.estadoInicial])
         saida = []
-
         quantidade = 0
         controle = False
         while(controle == False):
