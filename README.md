@@ -124,22 +124,22 @@
 ```py
         convert.set_string_all("1101")
         #Result :
-                Resultado AFD : 
-                String Recusada
-                Resultado AFND : 
-                String Recusada
+                #Resultado AFD : 
+                #String Recusada
+                #Resultado AFND : 
+                #String Recusada
         
         convert.set_string_all("111")
         #Result :
-                Resultado AFD : 
-                String Aceita
-                Resultado AFND : 
-                String Aceita
+                #Resultado AFD : 
+                #String Aceita
+                #Resultado AFND : 
+                #String Aceita
 
         convert.set_string_all("0")
         #Result :
-                Resultado AFD : 
-                String Aceita
-                Resultado AFND : 
-                String Aceita
+                #Resultado AFD : 
+                #String Aceita
+                #Resultado AFND : 
+                #String Aceita
 ```
