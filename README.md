@@ -20,7 +20,7 @@
 ```py
         afd.set_estadoInicial('q1')
 ```
-- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repetidos serão ignorado.
+- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contidos no conjunto de estados ou estados repetidos serão ignorado.
 
 ```py   
         afd.set_estadosFinais(['q2','q4'])
@@ -42,7 +42,7 @@
 
 ## Autômato finito não-determinístico - AFND
 
-- Primeiro é necessário instânciar o AFD.
+- Primeiro é necessário instânciar o AFND.
 
 ```py
         afnd = Automato()
@@ -62,7 +62,7 @@
 ```py
         afnd.set_estadoInicial('a')
 ```
-- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contigos no conjunto de estados ou estados repetidos serão ignorado.
+- O conjunto de estados finais devem ser passados por meio de um vetor, estados não contidos no conjunto de estados ou estados repetidos serão ignorado.
 
 ```py   
         afnd.set_estadosFinais(['a','c','f'])
@@ -86,38 +86,25 @@
 
 ## AFND to AFD
 
-- Instanciar o AFND.
+- Deve se seguir todos etapas de "configuração" já descritas de um AFND menos a de set_string.
 
 ```py
         afnd = AFND.Automato()
 ```
-
-- Setar um alfabeto.
-
 ```py
         afnd.set_alfabeto(['0','1'])
 ```
-
-- Setar o conjunto estados.
-
 ```py
         afnd.set_estados(['a','b','c','d','e','f'])
 ```
-
-- Setar estado inicial.
 
 ```py
         afnd.set_estadoInicial('a')
 ```
 
-- Setar conjunto de estados finais.
-
 ```py  
         afnd.set_estadosFinais(['d'])
 ```
-
-- Setar o dicionario com funções de transições.
-
 ```py
         afnd.set_transicoes({'a': {'0': ['e'], '1': ['b'],'epsilon':[]},
                              'b': {'0': [], '1': ['c'],'epsilon':['d']},

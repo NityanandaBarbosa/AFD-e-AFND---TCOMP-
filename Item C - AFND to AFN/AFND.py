@@ -171,7 +171,7 @@ class Automato:
                     aux_inicio = inicio_epsilon
                     aux_fim = fim_epsilon
                 else:  
-                    #print(inicio_epsilon.name, fim_epsilon.name)
+                    print(inicio_epsilon.name, fim_epsilon.name)
                     aux_fim.set_proxEstado(inicio_epsilon)
                     inicio_epsilon.set_anteriorEstado(aux_fim)
                     aux_fim =fim_epsilon
